@@ -116,7 +116,7 @@ const Home: React.FC = () => {
         </div>
 
         <div className="relative z-10 text-center px-4">
-          <h1 className="text-7xl md:text-9xl font-oswald font-black leading-none mb-4 animate-tighten flex flex-col items-center">
+          <h1 className="text-[3.5rem] md:text-9xl font-oswald font-black leading-none mb-4 mt-12 md:mt-0 animate-tighten flex flex-col items-center">
             {hero.title.includes('|') ? (
               <>
                 <span>{hero.title.split('|')[0]}</span>
@@ -129,7 +129,7 @@ const Home: React.FC = () => {
               </>
             )}
           </h1>
-          <p className="max-w-2xl mx-auto text-zinc-400 text-lg md:text-xl font-medium mb-10 tracking-wide uppercase italic">
+          <p className="max-w-2xl w-[90%] md:w-auto mx-auto text-zinc-400 text-base md:text-xl font-medium mb-10 tracking-wide uppercase italic">
             {hero.subtitle}
           </p>
           <div className="flex flex-wrap justify-center gap-4">
@@ -155,7 +155,7 @@ const Home: React.FC = () => {
       <section id="tour" className="py-24 bg-zinc-900">
         <div className="max-w-7xl mx-auto px-6">
           <SectionHeading title="Tour 2026" subtitle="O Grito das Ruas pelo Brasil" />
-          <div className="grid gap-4 mt-12">
+          <div className="grid gap-0 md:gap-4 mt-12">
             {tourDates.map((show) => (
               <div key={show.id} className="group bg-black/40 hover:bg-amber-500 p-6 flex flex-wrap items-center justify-between transition-all duration-300 border-b border-zinc-800 hover:border-transparent">
                 <div className="flex items-center gap-8 min-w-[300px]">

@@ -88,16 +88,22 @@ const Admin: React.FC = () => {
     setSaving(true);
     try {
       const sortedNews = sortNews(news);
-      await Promise.all([
-        setDoc(doc(db, 'siteData', 'albums'), { items: albums }),
-        setDoc(doc(db, 'siteData', 'tourDates'), { items: tourDates }),
-        setDoc(doc(db, 'siteData', 'news'), { items: sortedNews }),
-        setDoc(doc(db, 'siteData', 'hero'), hero),
+      const timeout = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error('Tempo esgotado. Verifique as regras do Firestore.')), 10000)
+      );
+      await Promise.race([
+        Promise.all([
+          setDoc(doc(db, 'siteData', 'albums'), { items: albums }),
+          setDoc(doc(db, 'siteData', 'tourDates'), { items: tourDates }),
+          setDoc(doc(db, 'siteData', 'news'), { items: sortedNews }),
+          setDoc(doc(db, 'siteData', 'hero'), hero),
+        ]),
+        timeout,
       ]);
       setNews(sortedNews);
       alert('Dados salvos com sucesso!');
     } catch (err) {
-      alert('Erro ao salvar. Verifique sua conexão e tente novamente.');
+      alert(`Erro ao salvar: ${err instanceof Error ? err.message : 'Verifique sua conexão e tente novamente.'}`);
       console.error(err);
     } finally {
       setSaving(false);
@@ -180,56 +186,56 @@ const Admin: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white p-8">
+    <div className="min-h-screen bg-zinc-950 text-white p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-12">
-          <div className="flex items-center gap-4">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-6 md:mb-12">
+          <div className="flex items-center gap-3">
             <a href="/" className="p-2 hover:bg-zinc-800 rounded-full transition-colors">
-              <ArrowLeft size={24} />
+              <ArrowLeft size={20} />
             </a>
-            <h1 className="text-4xl font-oswald font-black uppercase tracking-tighter">
+            <h1 className="text-2xl md:text-4xl font-oswald font-black uppercase tracking-tighter">
               CMS <span className="text-amber-500">ESCOMBRO</span>
             </h1>
           </div>
-          <div className="flex gap-4">
+          <div className="flex flex-wrap gap-2 md:gap-4">
             <button
               onClick={handleReset}
               disabled={saving}
-              className="flex items-center gap-2 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-400 hover:text-white font-bold py-3 px-6 rounded transition-all disabled:opacity-50"
+              className="flex items-center gap-1 bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-400 hover:text-white font-bold py-2 px-3 md:py-3 md:px-6 text-xs md:text-sm rounded transition-all disabled:opacity-50"
             >
               RESTAURAR PADRÕES
             </button>
             <button
               onClick={handleLogout}
-              className="flex items-center gap-2 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-3 px-6 rounded transition-all"
+              className="flex items-center gap-1 bg-zinc-800 hover:bg-zinc-700 text-white font-bold py-2 px-3 md:py-3 md:px-6 text-xs md:text-sm rounded transition-all"
             >
-              <LogOut size={20} /> SAIR
+              <LogOut size={16} /> SAIR
             </button>
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex items-center gap-2 bg-amber-600 hover:bg-amber-700 text-white font-bold py-3 px-8 rounded transition-all disabled:opacity-50"
+              className="flex items-center gap-1 bg-amber-600 hover:bg-amber-700 text-white font-bold py-2 px-3 md:py-3 md:px-8 text-xs md:text-sm rounded transition-all disabled:opacity-50"
             >
-              <Save size={20} /> {saving ? 'SALVANDO...' : 'SALVAR ALTERAÇÕES'}
+              <Save size={16} /> {saving ? 'SALVANDO...' : 'SALVAR ALTERAÇÕES'}
             </button>
           </div>
         </div>
 
-        <div className="flex gap-4 mb-8 border-b border-zinc-800 overflow-x-auto">
+        <div className="flex gap-2 md:gap-4 mb-6 md:mb-8 border-b border-zinc-800 overflow-x-auto">
           {(['hero', 'albums', 'tour', 'news'] as const).map(tab => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`pb-4 px-4 font-bold uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'text-amber-500 border-b-2 border-amber-500' : 'text-zinc-500 hover:text-white'}`}
+              className={`pb-3 md:pb-4 px-3 md:px-4 text-sm md:text-base font-bold uppercase tracking-widest transition-all whitespace-nowrap ${activeTab === tab ? 'text-amber-500 border-b-2 border-amber-500' : 'text-zinc-500 hover:text-white'}`}
             >
               {tab === 'hero' ? 'Hero' : tab === 'albums' ? 'Discografia' : tab === 'tour' ? 'Tour' : 'Notícias'}
             </button>
           ))}
         </div>
 
-        <div className="bg-zinc-900/50 p-6 rounded-xl border border-zinc-800">
-          <div className="flex justify-between items-center mb-6">
-            <h2 className="text-2xl font-oswald font-bold uppercase">
+        <div className="bg-zinc-900/50 p-3 md:p-6 rounded-xl border border-zinc-800">
+          <div className="flex justify-between items-center mb-4 md:mb-6">
+            <h2 className="text-lg md:text-2xl font-oswald font-bold uppercase">
               Gerenciar {activeTab === 'hero' ? 'Hero Section' : activeTab === 'albums' ? 'Álbuns' : activeTab === 'tour' ? 'Datas' : 'Postagens'}
             </h2>
             {activeTab !== 'hero' && (
