@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import { Menu, X, Instagram, Facebook, Youtube, Play, Ticket, ExternalLink, ChevronRight, Settings } from 'lucide-react';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 import { db } from './firebase';
 import SectionHeading from './components/SectionHeading';
 import { INITIAL_ALBUMS, INITIAL_TOUR_DATES, INITIAL_NEWS, INITIAL_HERO, sortNews } from './constants';
@@ -25,29 +25,21 @@ const Home: React.FC = () => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
 
-    const unsubAlbums = onSnapshot(doc(db, 'siteData', 'albums'), (snap) => {
-      if (snap.exists()) setAlbums(snap.data().items ?? INITIAL_ALBUMS);
-    });
-
-    const unsubTour = onSnapshot(doc(db, 'siteData', 'tourDates'), (snap) => {
-      if (snap.exists()) setTourDates(snap.data().items ?? INITIAL_TOUR_DATES);
-    });
-
-    const unsubNews = onSnapshot(doc(db, 'siteData', 'news'), (snap) => {
-      if (snap.exists()) setNews(sortNews(snap.data().items ?? INITIAL_NEWS));
-    });
-
-    const unsubHero = onSnapshot(doc(db, 'siteData', 'hero'), (snap) => {
-      if (snap.exists()) setHero(snap.data() as typeof INITIAL_HERO);
-    });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      unsubAlbums();
-      unsubTour();
-      unsubNews();
-      unsubHero();
+    const fetchData = async () => {
+      const [albumsSnap, tourSnap, newsSnap, heroSnap] = await Promise.all([
+        getDoc(doc(db, 'siteData', 'albums')),
+        getDoc(doc(db, 'siteData', 'tourDates')),
+        getDoc(doc(db, 'siteData', 'news')),
+        getDoc(doc(db, 'siteData', 'hero')),
+      ]);
+      if (albumsSnap.exists()) setAlbums(albumsSnap.data().items ?? INITIAL_ALBUMS);
+      if (tourSnap.exists()) setTourDates(tourSnap.data().items ?? INITIAL_TOUR_DATES);
+      if (newsSnap.exists()) setNews(sortNews(newsSnap.data().items ?? INITIAL_NEWS));
+      if (heroSnap.exists()) setHero(heroSnap.data() as typeof INITIAL_HERO);
     };
+    fetchData();
+
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
