@@ -1,0 +1,7 @@
+{
+  "name": "Escombro HC - Official Band Site",
+  "description": "A high-performance, dark-themed official website for the Brazilian hardcore band Escombro HC, featuring discography, tour dates, and an AI-powered fan interaction portal.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
