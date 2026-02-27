@@ -182,7 +182,7 @@ export const INITIAL_NEWS: NewsItem[] = [
 
 export const INITIAL_HERO = {
   title: 'HARDCORE POR UM | MUNDO MAIS DIGNO',
-  subtitle: 'NAS RUAS DE SÃO PAULO, ESMAGANDO A HIPOCRISIA E O PRECONCEITO.',
+  subtitle: 'Das ruas de São Paulo — pesado, direto e sem concessões contra a hipocrisia e o preconceito.',
   imageUrl: 'https://scontent-gru1-2.xx.fbcdn.net/v/t39.30808-6/500025109_1241273908003373_6958710255068696444_n.png?_nc_cat=108&ccb=1-7&_nc_sid=2a1932&_nc_ohc=ETgGMmotKqkQ7kNvwGhT-vi&_nc_oc=Adm9eZX-wFvcxFA7Fcb26PK4ASj2tgp-IEJJLYCmg-HIzkxif9iEQSguvJdzrw0WPLg&_nc_zt=23&_nc_ht=scontent-gru1-2.xx&_nc_gid=tdZLTw4g6zI5RseWl6MoIA&oh=00_AfuaEOBkuuCTzdDRnNkOM2yp7nyniKrb_SLvHhbRFbljBw&oe=69A772E8'
 };
 

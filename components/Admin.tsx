@@ -6,6 +6,7 @@ import { db, auth } from '../firebase';
 import { INITIAL_ALBUMS, INITIAL_TOUR_DATES, INITIAL_NEWS, INITIAL_HERO, sortNews } from '../constants';
 import { Album, TourDate, NewsItem } from '../types';
 import { Plus, Trash2, Save, ArrowLeft, Lock, LogOut } from 'lucide-react';
+import toast from 'react-hot-toast';
 
 const Admin: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -75,9 +76,9 @@ const Admin: React.FC = () => {
         setDoc(doc(db, 'siteData', 'news'), { items: sortNews(INITIAL_NEWS) }),
         setDoc(doc(db, 'siteData', 'hero'), INITIAL_HERO),
       ]);
-      alert('Dados restaurados com sucesso!');
+      toast.success('Dados restaurados com sucesso!');
     } catch (err) {
-      alert('Erro ao restaurar dados. Tente novamente.');
+      toast.error('Erro ao restaurar dados. Tente novamente.');
       console.error(err);
     } finally {
       setSaving(false);
@@ -101,9 +102,9 @@ const Admin: React.FC = () => {
         timeout,
       ]);
       setNews(sortedNews);
-      alert('Dados salvos com sucesso!');
+      toast.success('Dados salvos com sucesso!');
     } catch (err) {
-      alert(`Erro ao salvar: ${err instanceof Error ? err.message : 'Verifique sua conexão e tente novamente.'}`);
+      toast.error(err instanceof Error ? err.message : 'Erro ao salvar. Verifique sua conexão.');
       console.error(err);
     } finally {
       setSaving(false);

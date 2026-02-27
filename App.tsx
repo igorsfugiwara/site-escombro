@@ -11,6 +11,7 @@ import Admin from './components/Admin';
 import Contact from './components/Contact';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import Press from './components/Press';
+import { Toaster } from 'react-hot-toast';
 
 const Home: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -155,10 +156,10 @@ const Home: React.FC = () => {
       <section id="tour" className="py-24 bg-zinc-900">
         <div className="max-w-7xl mx-auto px-6">
           <SectionHeading title="Tour 2026" subtitle="O Grito das Ruas pelo Brasil" />
-          <div className="grid gap-0 md:gap-4 mt-12">
+          <div className="grid gap-4 mt-12">
             {tourDates.map((show) => (
               <div key={show.id} className="group bg-black/40 hover:bg-amber-500 p-6 flex flex-wrap items-center justify-between transition-all duration-300 border-b border-zinc-800 hover:border-transparent">
-                <div className="flex items-center gap-8 min-w-[300px]">
+                <div className="flex items-center gap-0 md:gap-8 min-w-[300px]">
                   <span className="text-3xl font-oswald font-black text-amber-500 group-hover:text-white transition-colors">
                     {show.date}
                   </span>
@@ -272,7 +273,7 @@ const Home: React.FC = () => {
                 ESCOMBRO<span className="text-amber-500">HC</span>
               </h2>
               <p className="text-zinc-500 max-w-md text-lg leading-relaxed">
-                Nascido no caos urbano de São Paulo em 2014, o Escombro é a voz da resistência contra um sistema falido. Através do Hardcore, levamos união e respeito para quem é da luta.
+              Nascido no caos urbano de São Paulo em 2016, o Escombro é uma banda de hardcore com forte crítica social, que expõe desigualdades, opressões e as lutas cotidianas da população brasileira através de letras diretas e urgentes. Através do hardcore, levamos união, consciência e respeito para quem é da luta.
               </p>
             </div>
             <div>
@@ -305,6 +306,7 @@ const Home: React.FC = () => {
 const App: React.FC = () => {
   return (
     <BrowserRouter>
+      <Toaster position="bottom-center" toastOptions={{ style: { background: '#18181b', color: '#fff', border: '1px solid #3f3f46' } }} />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/admin" element={<Admin />} />
