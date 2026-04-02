@@ -85,23 +85,25 @@ const Admin: React.FC = () => {
     }
   };
 
-  const handleSave = () => {
-    setSaving(true);
-    try {
-      const sortedNews = sortNews(news);
-      setDoc(doc(db, 'siteData', 'albums'), { items: albums });
-      setDoc(doc(db, 'siteData', 'tourDates'), { items: tourDates });
-      setDoc(doc(db, 'siteData', 'news'), { items: sortedNews });
-      setDoc(doc(db, 'siteData', 'hero'), hero);
-      setNews(sortedNews);
-      toast.success('Dados salvos com sucesso!');
-    } catch (err) {
-      toast.error('Erro ao salvar. Verifique sua conexão.');
-      console.error(err);
-    } finally {
-      setSaving(false);
-    }
-  };
+const handleSave = async () => {
+  setSaving(true);
+  try {
+    const sortedNews = sortNews(news);
+    await Promise.all([
+      setDoc(doc(db, 'siteData', 'albums'), { items: albums }),
+      setDoc(doc(db, 'siteData', 'tourDates'), { items: tourDates }),
+      setDoc(doc(db, 'siteData', 'news'), { items: sortedNews }),
+      setDoc(doc(db, 'siteData', 'hero'), hero),
+    ]);
+    setNews(sortedNews);
+    toast.success('Dados salvos com sucesso!');
+  } catch (err) {
+    toast.error('Erro ao salvar. Verifique sua conexão.');
+    console.error(err);
+  } finally {
+    setSaving(false);
+  }
+};
 
   const addItem = (type: 'albums' | 'tour' | 'news') => {
     if (type === 'albums') {
