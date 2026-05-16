@@ -60,49 +60,70 @@ export const INITIAL_ALBUMS: Album[] = [
   }
 ];
 
+const PT_MONTHS: Record<string, number> = {
+  JAN: 0, FEV: 1, MAR: 2, ABR: 3, MAI: 4, JUN: 5,
+  JUL: 6, AGO: 7, SET: 8, OUT: 9, NOV: 10, DEZ: 11,
+};
+
+export const isTourDatePast = (dateStr: string): boolean => {
+  const [day, monthAbbr] = dateStr.trim().split(/\s+/);
+  const month = PT_MONTHS[monthAbbr?.toUpperCase()];
+  if (!day || month === undefined) return false;
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const event = new Date(now.getFullYear(), month, parseInt(day));
+  return event < today;
+};
+
 export const INITIAL_TOUR_DATES: TourDate[] = [
   {
     id: 't1',
     date: '06 MAR',
     city: 'São Paulo - SP',
     venue: 'Fabrique Club (w/ Madball)',
-    ticketLink: 'https://fastix.com.br/events/pre-show-ndp-fest-madball-em-sao-paulo'
+    ticketLink: 'https://fastix.com.br/events/pre-show-ndp-fest-madball-em-sao-paulo',
+    isPast: isTourDatePast('06 MAR'),
   },
   {
     id: 't2',
     date: '10 ABR',
     city: 'Curitiba - PR',
     venue: 'Belvedere (w/ Muralha)',
-    ticketLink: '#'
+    ticketLink: '#',
+    isPast: isTourDatePast('10 ABR'),
   },
   {
     id: 't3',
     date: '12 ABR',
     city: 'São Paulo - SP',
     venue: 'La Iglesia (w/ OTR & Institution)',
-    ticketLink: '#'
+    ticketLink: '#',
+    isPast: isTourDatePast('12 ABR'),
   },
   {
     id: 't4',
     date: '25 ABR',
     city: 'São Paulo - SP',
     venue: 'CasaLab (w/ Bebê Feio, Cariça de Bode & DOR)',
-    ticketLink: '#'
+    ticketLink: '#',
+    isPast: isTourDatePast('25 ABR'),
   },
   {
     id: 't5',
     date: '20 JUN',
     city: 'Americana - SP',
     venue: 'HUP (w/ Hannya, Divera & Agnose)',
-    ticketLink: '#'
+    ticketLink: '#',
+    isPast: isTourDatePast('20 JUN'),
   },
   {
     id: 't6',
     date: '12 JUL',
     city: 'São Carlos - SP',
     venue: 'Pirata (w/ Póstuma & Hannya)',
-    ticketLink: '#'
-  }
+    ticketLink: '#',
+    isPast: isTourDatePast('12 JUL'),
+  },
 ];
 
 export const INITIAL_NEWS: NewsItem[] = [

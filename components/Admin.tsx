@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { doc, setDoc, onSnapshot } from 'firebase/firestore';
 import { signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'firebase/auth';
 import { db, auth } from '../firebase';
-import { INITIAL_ALBUMS, INITIAL_TOUR_DATES, INITIAL_NEWS, INITIAL_HERO, sortNews } from '../constants';
+import { INITIAL_ALBUMS, INITIAL_TOUR_DATES, INITIAL_NEWS, INITIAL_HERO, sortNews, isTourDatePast } from '../constants';
 import { Album, TourDate, NewsItem } from '../types';
 import { Plus, Trash2, Save, ArrowLeft, Lock, LogOut } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -37,7 +37,10 @@ const Admin: React.FC = () => {
       if (snap.exists()) setAlbums(snap.data().items ?? INITIAL_ALBUMS);
     });
     const unsubTour = onSnapshot(doc(db, 'siteData', 'tourDates'), (snap) => {
-      if (snap.exists()) setTourDates(snap.data().items ?? INITIAL_TOUR_DATES);
+      if (snap.exists()) {
+        const items = snap.data().items ?? INITIAL_TOUR_DATES;
+        setTourDates(items.map((t: TourDate) => ({ ...t, isPast: t.isPast ?? isTourDatePast(t.date) })));
+      }
     });
     const unsubNews = onSnapshot(doc(db, 'siteData', 'news'), (snap) => {
       if (snap.exists()) setNews(sortNews(snap.data().items ?? INITIAL_NEWS));
@@ -124,7 +127,7 @@ const handleSave = async () => {
     else setNews(news.filter(i => i.id !== id));
   };
 
-  const updateItem = (type: 'albums' | 'tour' | 'news', id: string, field: string, value: string) => {
+  const updateItem = (type: 'albums' | 'tour' | 'news', id: string, field: string, value: string | boolean) => {
     if (type === 'albums') {
       setAlbums(albums.map(i => i.id === id ? { ...i, [field]: value } : i));
     } else if (type === 'tour') {
@@ -320,7 +323,7 @@ const handleSave = async () => {
             ))}
 
             {activeTab === 'tour' && tourDates.map(show => (
-              <div key={show.id} className="grid grid-cols-1 md:grid-cols-5 gap-4 p-4 bg-black/40 rounded border border-zinc-800">
+              <div key={show.id} className={`grid grid-cols-1 md:grid-cols-6 gap-4 p-4 rounded border ${show.isPast ? 'bg-zinc-900/30 border-zinc-800/50 opacity-60' : 'bg-black/40 border-zinc-800'}`}>
                 <div>
                   <label className="block text-xs font-bold text-zinc-500 uppercase mb-2">Data</label>
                   <input
@@ -352,6 +355,19 @@ const handleSave = async () => {
                     value={show.ticketLink}
                     onChange={(e) => updateItem('tour', show.id, 'ticketLink', e.target.value)}
                   />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-zinc-500 uppercase mb-2">Evento Passado</label>
+                  <div className="flex items-center h-[38px] gap-2">
+                    <input
+                      type="checkbox"
+                      id={`past-${show.id}`}
+                      checked={show.isPast ?? false}
+                      onChange={(e) => updateItem('tour', show.id, 'isPast', e.target.checked)}
+                      className="w-4 h-4 accent-amber-500 cursor-pointer"
+                    />
+                    <label htmlFor={`past-${show.id}`} className="text-xs text-zinc-400 cursor-pointer select-none">Marcar</label>
+                  </div>
                 </div>
                 <div className="flex items-end pb-1">
                   <button

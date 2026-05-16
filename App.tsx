@@ -104,6 +104,7 @@ const Home: React.FC = () => {
             src={hero.imageUrl}
             alt="Escombro HC Live"
             className="w-full h-full object-cover opacity-50"
+            onError={(e) => { (e.target as HTMLImageElement).src = INITIAL_HERO.imageUrl; }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
         </div>
@@ -150,7 +151,13 @@ const Home: React.FC = () => {
           <SectionHeading title="Tour 2026" subtitle="O Grito das Ruas pelo Brasil" />
           <div className="grid gap-4 mt-12">
             {tourDates.map((show) => (
-              <div key={show.id} className="group bg-black/40 hover:bg-amber-500 p-6 flex flex-wrap items-center justify-between transition-all duration-300 border-b border-zinc-800 hover:border-transparent">
+              <div
+                key={show.id}
+                className={`relative group p-6 flex flex-wrap items-center justify-between transition-all duration-300 border-b border-zinc-800 ${show.isPast ? 'opacity-40' : 'bg-black/40 hover:bg-amber-500 hover:border-transparent'}`}
+              >
+                {show.isPast && (
+                  <div className="absolute inset-x-6 top-1/2 h-px bg-zinc-400 pointer-events-none" />
+                )}
                 <div className="flex items-center gap-0 md:gap-8 min-w-[300px]">
                   <span className="text-3xl font-oswald font-black text-amber-500 group-hover:text-white transition-colors">
                     {show.date}

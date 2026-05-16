@@ -13,6 +13,7 @@ export interface TourDate {
   city: string;
   venue: string;
   ticketLink: string;
+  isPast?: boolean;
 }
 
 export interface NewsItem {

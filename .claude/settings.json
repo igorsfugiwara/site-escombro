@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /home/user/github/site-escombro log --oneline -5)",
+      "Bash(git -C /home/user/github/site-escombro show --stat HEAD)",
+      "Bash(git -C /home/user/github/site-escombro log --oneline -1 origin/main)",
+      "Bash(git -C /home/user/github/site-escombro show HEAD:firebase.ts)",
+      "Bash(git -C /home/user/github/site-escombro remote -v)",
+      "Bash(git -C /home/user/github/site-escombro log --oneline origin/main -3)",
+      "Bash(grep -E \"^\\(auth|firestore|analytics\\)$\")",
+      "Bash(node -e \"const m = require\\('/home/user/github/site-escombro/node_modules/firebase/auth/package.json'\\); console.log\\(JSON.stringify\\(m.exports || m.main || 'no exports field', null, 2\\)\\)\")",
+      "Bash(git -C /home/user/github/site-escombro commit --allow-empty -m \"chore: trigger vercel rebuild\")",
+      "Bash(git -C /home/user/github/site-escombro push)",
+      "Bash(npm install *)",
+      "Bash(npm uninstall *)"
+    ]
+  }
+}
