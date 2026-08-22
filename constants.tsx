@@ -75,6 +75,13 @@ export const isTourDatePast = (dateStr: string): boolean => {
   return event < today;
 };
 
+// Fonte única da verdade para "show passado":
+// vale a marcação manual do admin OU a data já ter ficado para trás.
+// Sem isso, um show salvo com isPast: false continuava aparecendo como
+// futuro para sempre, já que o valor gravado no Firestore nunca envelhece.
+export const isShowPast = (show: TourDate): boolean =>
+  show.isPast === true || isTourDatePast(show.date);
+
 export const INITIAL_TOUR_DATES: TourDate[] = [
   {
     id: 't1',

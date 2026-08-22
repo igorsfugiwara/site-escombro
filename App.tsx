@@ -5,7 +5,7 @@ import { Menu, X, Instagram, Facebook, Youtube, Play, Ticket, ExternalLink, Chev
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from './firebase';
 import SectionHeading from './components/SectionHeading';
-import { INITIAL_ALBUMS, INITIAL_TOUR_DATES, INITIAL_NEWS, INITIAL_HERO, sortNews } from './constants';
+import { INITIAL_ALBUMS, INITIAL_TOUR_DATES, INITIAL_NEWS, INITIAL_HERO, sortNews, isShowPast } from './constants';
 import { Album, TourDate, NewsItem } from './types';
 import Admin from './components/Admin';
 import Contact from './components/Contact';
@@ -150,12 +150,14 @@ const Home: React.FC = () => {
         <div className="max-w-7xl mx-auto px-6">
           <SectionHeading title="Tour 2026" subtitle="O Grito das Ruas pelo Brasil" />
           <div className="grid gap-4 mt-12">
-            {tourDates.map((show) => (
+            {tourDates.map((show) => {
+              const past = isShowPast(show);
+              return (
               <div
                 key={show.id}
-                className={`relative group p-6 flex flex-wrap items-center justify-between transition-all duration-300 border-b border-zinc-800 ${show.isPast ? 'opacity-40' : 'bg-black/40 hover:bg-amber-500 hover:border-transparent'}`}
+                className={`relative group p-6 flex flex-wrap items-center justify-between transition-all duration-300 border-b border-zinc-800 ${past ? 'opacity-40' : 'bg-black/40 hover:bg-amber-500 hover:border-transparent'}`}
               >
-                {show.isPast && (
+                {past && (
                   <div className="absolute inset-x-6 top-1/2 h-px bg-zinc-400 pointer-events-none" />
                 )}
                 <div className="flex items-center gap-0 md:gap-8 min-w-[300px]">
@@ -176,7 +178,8 @@ const Home: React.FC = () => {
                   INGRESSOS <Ticket size={18} />
                 </a>
               </div>
-            ))}
+              );
+            })}
           </div>
           <div className="mt-12 text-center">
             <a href="#" className="inline-flex items-center gap-2 text-amber-500 font-bold hover:underline">
