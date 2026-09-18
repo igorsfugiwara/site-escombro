@@ -12,7 +12,8 @@
       "Bash(git -C /home/user/github/site-escombro commit --allow-empty -m \"chore: trigger vercel rebuild\")",
       "Bash(git -C /home/user/github/site-escombro push)",
       "Bash(npm install *)",
-      "Bash(npm uninstall *)"
+      "Bash(npm uninstall *)",
+      "Bash(sort -t: -k2)"
     ]
   }
 }
